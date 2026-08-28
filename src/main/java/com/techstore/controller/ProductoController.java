@@ -7,13 +7,12 @@ import java.util.List;
 
 public class ProductoController {
 
-    private ProductoDAO productoDAO;
+    private final ProductoDAO productoDAO;
 
     public ProductoController() {
         productoDAO = new ProductoDAO();
     }
 
-    // Registrar
     public boolean registrarProducto(
             String codigo,
             String nombre,
@@ -36,13 +35,11 @@ public class ProductoController {
         return productoDAO.registrar(producto);
     }
 
-    // Consultar
     public List<Producto> listarProductos() {
 
         return productoDAO.listar();
     }
 
-    // Actualizar
     public boolean actualizarProducto(
             String codigo,
             String nombre,
@@ -63,5 +60,10 @@ public class ProductoController {
         );
 
         return productoDAO.actualizar(producto);
+    }
+
+    public boolean eliminarProducto(String codigo) {
+
+        return productoDAO.eliminar(codigo);
     }
 }

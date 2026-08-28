@@ -11,27 +11,18 @@
     <artifactId>techstore</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <name>TechStore</name>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>26</maven.compiler.release>
     </properties>
 
     <dependencies>
 
-        <!-- Conector para conectar Java con MySQL -->
+        <!-- MySQL -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>9.4.0</version>
-        </dependency>
-
-        <!-- Librería para pruebas -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.11.0</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>
@@ -40,23 +31,28 @@
 
         <plugins>
 
-            <!-- Configuración del compilador Java -->
+            <!-- Compilador Java -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.13.0</version>
-
                 <configuration>
                     <release>26</release>
                 </configuration>
-
             </plugin>
 
-            <!-- Pruebas -->
+            <!-- Ejecutar aplicación -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.3.0</version>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+
+                <configuration>
+                    <mainClass>
+                        com.techstore.view.VentanaPrincipal
+                    </mainClass>
+                </configuration>
+
             </plugin>
 
         </plugins>

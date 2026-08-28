@@ -12,10 +12,6 @@ import java.util.List;
 
 public class ProductoDAO {
 
-    // ========================================
-    // REGISTRAR
-    // ========================================
-
     public boolean registrar(Producto producto) {
 
         String sql = """
@@ -25,8 +21,7 @@ public class ProductoDAO {
                 """;
 
         try (Connection conexion = ConexionBD.conectar();
-             PreparedStatement sentencia =
-                     conexion.prepareStatement(sql)) {
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
 
             sentencia.setString(1, producto.getCodigo());
             sentencia.setString(2, producto.getNombre());
@@ -36,9 +31,7 @@ public class ProductoDAO {
             sentencia.setInt(6, producto.getStock());
             sentencia.setBoolean(7, producto.isEstado());
 
-            sentencia.executeUpdate();
-
-            return true;
+            return sentencia.executeUpdate() > 0;
 
         } catch (SQLException e) {
 
@@ -49,76 +42,40 @@ public class ProductoDAO {
         }
     }
 
-    // ========================================
-    // CONSULTAR
-    // ========================================
-
     public List<Producto> listar() {
 
         List<Producto> productos = new ArrayList<>();
 
-        String sql = "SELECT * FROM productos";
+        String sql = "SELECT * FROM productos ORDER BY id";
 
         try (Connection conexion = ConexionBD.conectar();
-             PreparedStatement sentencia =
-                     conexion.prepareStatement(sql);
-             ResultSet resultado =
-                     sentencia.executeQuery()) {
+             PreparedStatement sentencia = conexion.prepareStatement(sql);
+             ResultSet resultado = sentencia.executeQuery()) {
 
             while (resultado.next()) {
 
                 Producto producto = new Producto();
 
-                producto.setId(
-                        resultado.getInt("id")
-                );
-
-                producto.setCodigo(
-                        resultado.getString("codigo")
-                );
-
-                producto.setNombre(
-                        resultado.getString("nombre")
-                );
-
-                producto.setCategoria(
-                        resultado.getString("categoria")
-                );
-
-                producto.setMarca(
-                        resultado.getString("marca")
-                );
-
-                producto.setPrecio(
-                        resultado.getDouble("precio")
-                );
-
-                producto.setStock(
-                        resultado.getInt("stock")
-                );
-
-                producto.setEstado(
-                        resultado.getBoolean("estado")
-                );
+                producto.setId(resultado.getInt("id"));
+                producto.setCodigo(resultado.getString("codigo"));
+                producto.setNombre(resultado.getString("nombre"));
+                producto.setCategoria(resultado.getString("categoria"));
+                producto.setMarca(resultado.getString("marca"));
+                producto.setPrecio(resultado.getDouble("precio"));
+                producto.setStock(resultado.getInt("stock"));
+                producto.setEstado(resultado.getBoolean("estado"));
 
                 productos.add(producto);
             }
 
         } catch (SQLException e) {
 
-            System.out.println(
-                    "Error al consultar productos:"
-            );
-
+            System.out.println("Error al consultar productos:");
             System.out.println(e.getMessage());
         }
 
         return productos;
     }
-
-    // ========================================
-    // ACTUALIZAR
-    // ========================================
 
     public boolean actualizar(Producto producto) {
 
@@ -134,8 +91,7 @@ public class ProductoDAO {
                 """;
 
         try (Connection conexion = ConexionBD.conectar();
-             PreparedStatement sentencia =
-                     conexion.prepareStatement(sql)) {
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
 
             sentencia.setString(1, producto.getNombre());
             sentencia.setString(2, producto.getCategoria());
@@ -145,17 +101,31 @@ public class ProductoDAO {
             sentencia.setBoolean(6, producto.isEstado());
             sentencia.setString(7, producto.getCodigo());
 
-            int filasActualizadas =
-                    sentencia.executeUpdate();
-
-            return filasActualizadas > 0;
+            return sentencia.executeUpdate() > 0;
 
         } catch (SQLException e) {
 
-            System.out.println(
-                    "Error al actualizar producto:"
-            );
+            System.out.println("Error al actualizar producto:");
+            System.out.println(e.getMessage());
 
+            return false;
+        }
+    }
+
+    public boolean eliminar(String codigo) {
+
+        String sql = "DELETE FROM productos WHERE codigo = ?";
+
+        try (Connection conexion = ConexionBD.conectar();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+
+            sentencia.setString(1, codigo);
+
+            return sentencia.executeUpdate() > 0;
+
+        } catch (SQLException e) {
+
+            System.out.println("Error al eliminar producto:");
             System.out.println(e.getMessage());
 
             return false;
