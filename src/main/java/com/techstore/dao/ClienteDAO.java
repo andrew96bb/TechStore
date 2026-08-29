@@ -15,16 +15,35 @@ public class ClienteDAO {
 
         String sql = """
                 INSERT INTO clientes
-                (nombre, correo, telefono)
-                VALUES (?, ?, ?)
+                (
+                    documento,
+                    nombre,
+                    correo,
+                    telefono,
+                    fecha_nacimiento,
+                    sexo,
+                    departamento,
+                    ciudad,
+                    direccion
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
-        try (Connection conexion = ConexionBD.conectar();
-             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+        try (
+                Connection conexion = ConexionBD.conectar();
+                PreparedStatement sentencia =
+                        conexion.prepareStatement(sql)
+        ) {
 
-            sentencia.setString(1, cliente.getNombre());
-            sentencia.setString(2, cliente.getCorreo());
-            sentencia.setString(3, cliente.getTelefono());
+            sentencia.setString(1, cliente.getDocumento());
+            sentencia.setString(2, cliente.getNombre());
+            sentencia.setString(3, cliente.getCorreo());
+            sentencia.setString(4, cliente.getTelefono());
+            sentencia.setString(5, cliente.getFechaNacimiento());
+            sentencia.setString(6, cliente.getSexo());
+            sentencia.setString(7, cliente.getDepartamento());
+            sentencia.setString(8, cliente.getCiudad());
+            sentencia.setString(9, cliente.getDireccion());
 
             return sentencia.executeUpdate() > 0;
 
@@ -39,22 +58,64 @@ public class ClienteDAO {
 
     public List<Cliente> listar() {
 
-        List<Cliente> clientes = new ArrayList<>();
+        List<Cliente> clientes =
+                new ArrayList<>();
 
-        String sql = "SELECT * FROM clientes ORDER BY id";
+        String sql =
+                "SELECT * FROM clientes ORDER BY id";
 
-        try (Connection conexion = ConexionBD.conectar();
-             PreparedStatement sentencia = conexion.prepareStatement(sql);
-             ResultSet resultado = sentencia.executeQuery()) {
+        try (
+                Connection conexion = ConexionBD.conectar();
+                PreparedStatement sentencia =
+                        conexion.prepareStatement(sql);
+                ResultSet resultado =
+                        sentencia.executeQuery()
+        ) {
 
             while (resultado.next()) {
 
-                Cliente cliente = new Cliente();
+                Cliente cliente =
+                        new Cliente();
 
-                cliente.setId(resultado.getInt("id"));
-                cliente.setNombre(resultado.getString("nombre"));
-                cliente.setCorreo(resultado.getString("correo"));
-                cliente.setTelefono(resultado.getString("telefono"));
+                cliente.setId(
+                        resultado.getInt("id")
+                );
+
+                cliente.setDocumento(
+                        resultado.getString("documento")
+                );
+
+                cliente.setNombre(
+                        resultado.getString("nombre")
+                );
+
+                cliente.setCorreo(
+                        resultado.getString("correo")
+                );
+
+                cliente.setTelefono(
+                        resultado.getString("telefono")
+                );
+
+                cliente.setFechaNacimiento(
+                        resultado.getString("fecha_nacimiento")
+                );
+
+                cliente.setSexo(
+                        resultado.getString("sexo")
+                );
+
+                cliente.setDepartamento(
+                        resultado.getString("departamento")
+                );
+
+                cliente.setCiudad(
+                        resultado.getString("ciudad")
+                );
+
+                cliente.setDireccion(
+                        resultado.getString("direccion")
+                );
 
                 clientes.add(cliente);
             }
@@ -72,19 +133,34 @@ public class ClienteDAO {
 
         String sql = """
                 UPDATE clientes
-                SET nombre = ?,
+                SET documento = ?,
+                    nombre = ?,
                     correo = ?,
-                    telefono = ?
+                    telefono = ?,
+                    fecha_nacimiento = ?,
+                    sexo = ?,
+                    departamento = ?,
+                    ciudad = ?,
+                    direccion = ?
                 WHERE id = ?
                 """;
 
-        try (Connection conexion = ConexionBD.conectar();
-             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+        try (
+                Connection conexion = ConexionBD.conectar();
+                PreparedStatement sentencia =
+                        conexion.prepareStatement(sql)
+        ) {
 
-            sentencia.setString(1, cliente.getNombre());
-            sentencia.setString(2, cliente.getCorreo());
-            sentencia.setString(3, cliente.getTelefono());
-            sentencia.setInt(4, cliente.getId());
+            sentencia.setString(1, cliente.getDocumento());
+            sentencia.setString(2, cliente.getNombre());
+            sentencia.setString(3, cliente.getCorreo());
+            sentencia.setString(4, cliente.getTelefono());
+            sentencia.setString(5, cliente.getFechaNacimiento());
+            sentencia.setString(6, cliente.getSexo());
+            sentencia.setString(7, cliente.getDepartamento());
+            sentencia.setString(8, cliente.getCiudad());
+            sentencia.setString(9, cliente.getDireccion());
+            sentencia.setInt(10, cliente.getId());
 
             return sentencia.executeUpdate() > 0;
 
@@ -99,10 +175,14 @@ public class ClienteDAO {
 
     public boolean eliminar(int id) {
 
-        String sql = "DELETE FROM clientes WHERE id = ?";
+        String sql =
+                "DELETE FROM clientes WHERE id = ?";
 
-        try (Connection conexion = ConexionBD.conectar();
-             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
+        try (
+                Connection conexion = ConexionBD.conectar();
+                PreparedStatement sentencia =
+                        conexion.prepareStatement(sql)
+        ) {
 
             sentencia.setInt(1, id);
 

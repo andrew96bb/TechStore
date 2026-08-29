@@ -7,11 +7,15 @@ import java.util.List;
 
 public class ProductoController {
 
-    private final ProductoDAO productoDAO;
+    private ProductoDAO productoDAO;
 
     public ProductoController() {
         productoDAO = new ProductoDAO();
     }
+
+    // =========================================
+    // REGISTRAR PRODUCTO
+    // =========================================
 
     public boolean registrarProducto(
             String codigo,
@@ -35,10 +39,18 @@ public class ProductoController {
         return productoDAO.registrar(producto);
     }
 
+    // =========================================
+    // LISTAR PRODUCTOS
+    // =========================================
+
     public List<Producto> listarProductos() {
 
         return productoDAO.listar();
     }
+
+    // =========================================
+    // ACTUALIZAR PRODUCTO
+    // =========================================
 
     public boolean actualizarProducto(
             String codigo,
@@ -62,7 +74,12 @@ public class ProductoController {
         return productoDAO.actualizar(producto);
     }
 
-    public boolean eliminarProducto(String codigo) {
+    // =========================================
+    // ELIMINAR PRODUCTO
+    // =========================================
+
+    public boolean eliminarProducto(
+            String codigo) {
 
         return productoDAO.eliminar(codigo);
     }
